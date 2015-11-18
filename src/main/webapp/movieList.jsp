@@ -4,14 +4,22 @@
     Author     : Grant
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Movie List</title>
+        
+        <link rel="stylesheet" type="text/css" href="styles.css" />
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <div>
+            <h1>Movie List</h1>
+            <c:forEach items="${movieTitles}" var="movieTitle">
+                <p>${movieTitle}</p>
+            </c:forEach>
+        </div>
     </body>
 </html>
