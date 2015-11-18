@@ -5,8 +5,14 @@
  */
 package com.byui.moviefinder;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -37,7 +43,7 @@ public class MovieSearch extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet MovieSearch</title>");            
+            out.println("<title>Servlet MovieSearch</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet MovieSearch at " + request.getContextPath() + "</h1>");
@@ -58,7 +64,33 @@ public class MovieSearch extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        List<String> movieTitles = new ArrayList<>();
+        String movie = request.getParameter("movie");
+        movie = URLEncoder.encode(movie, "UTF-8");
+        String query = "http://www.omdbapi.com/?s=" + movie;
+
+        URL queryURL = new URL(query);
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        Map<String, Object> map = mapper.readValue(queryURL, Map.class);
+
+        List list = (List) map.get("Search");
+
+        for (Object item : list) {
+            Map<String, Object> innerMap = (Map<String, Object>) item;
+            for (String key : innerMap.keySet()) {
+                if (key.equals("Title")) {
+                    movieTitles.add((String) innerMap.get(key));
+                    break;
+                }
+                //out.println(key + ": " + innerMap.get(key));
+                //System.out.println(key + ": " + innerMap.get(key));
+            }
+        }
+
+        request.setAttribute("movieTitles", movieTitles);
+        request.getRequestDispatcher("movieList.jsp").forward(request, response);
     }
 
     /**
