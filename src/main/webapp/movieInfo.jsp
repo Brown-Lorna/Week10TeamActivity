@@ -19,6 +19,8 @@
             
             <p>Year: ${movie.year}</p>
             <p>Genre: ${movie.genre}</p>
+            <p>Director: ${movie.director}</p>
+            <p>Actors: ${movie.actors}</p>
         </div>
     </body>
 </html>

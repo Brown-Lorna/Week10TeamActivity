@@ -14,6 +14,8 @@ public class Movie {
     private String imdbID;
     private String year;
     private String genre;
+    private String actors;
+    private String director;
 
     public Movie() {
         
@@ -22,6 +24,22 @@ public class Movie {
     public Movie(String title, String id) {
         this.setTitle(title);
         this.setImdbID(id);
+    }
+
+    public String getActors() {
+        return actors;
+    }
+
+    public void setActors(String actors) {
+        this.actors = actors;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
     }
 
     public String getYear() {

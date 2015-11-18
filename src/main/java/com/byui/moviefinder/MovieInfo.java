@@ -73,10 +73,14 @@ public class MovieInfo extends HttpServlet {
         String title = (String)map.get("Title");
         String year = (String)map.get("Year");
         String genre = (String)map.get("Genre");
-
+        String director = (String)map.get("Director");
+        String actors = (String)map.get("Actors");
+        
         movie.setTitle(title);
         movie.setYear(year);
         movie.setGenre(genre);
+        movie.setDirector(director);
+        movie.setActors(actors);
         
         request.setAttribute("movie", movie);
         request.getRequestDispatcher("movieInfo.jsp").forward(request, response);
