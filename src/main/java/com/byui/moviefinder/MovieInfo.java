@@ -9,8 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -23,8 +21,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Grant
  */
-@WebServlet(name = "MovieSearch", urlPatterns = {"/MovieSearch"})
-public class MovieSearch extends HttpServlet {
+@WebServlet(name = "MovieInfo", urlPatterns = {"/MovieInfo"})
+public class MovieInfo extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,10 +41,10 @@ public class MovieSearch extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet MovieSearch</title>");
+            out.println("<title>Servlet MovieInfo</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet MovieSearch at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet MovieInfo at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -64,50 +62,24 @@ public class MovieSearch extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Movie> moviesList = new ArrayList<>();
-        String movie = request.getParameter("movie");
-        movie = URLEncoder.encode(movie, "UTF-8");
-        String query = "http://www.omdbapi.com/?s=" + movie;
+        Movie movie = new Movie();
+        String imdbID = request.getParameter("imdbID");
+        String query = "http://www.omdbapi.com/?i=" + imdbID;
 
         URL queryURL = new URL(query);
-
         ObjectMapper mapper = new ObjectMapper();
-
         Map<String, Object> map = mapper.readValue(queryURL, Map.class);
+        
+        String title = (String)map.get("Title");
+        String year = (String)map.get("Year");
+        String genre = (String)map.get("Genre");
 
-        List list = (List) map.get("Search");
-
-        for (Object item : list) {
-            Map<String, Object> innerMap = (Map<String, Object>) item;
-
-            String title = "";
-            String imdbID = "";
-
-            for (String key : innerMap.keySet()) {
-                if (key.equals("Title")) {
-                    title = (String)innerMap.get(key);
-                    if (!title.equals("") && !imdbID.equals("")) {
-                        moviesList.add(new Movie(title, imdbID));
-                        break;
-                    }
-                } else if (key.equals("imdbID")) {
-                    imdbID = (String)innerMap.get(key);
-                    if (!title.equals("") && !imdbID.equals("")) {
-                        moviesList.add(new Movie(title, imdbID));
-                        break;
-                    }
-                }
-//                if (key.equals("Title")) {
-//                    movieTitles.add(new Movie((String) innerMap.get(key));
-//                    break;
-//                }
-                //out.println(key + ": " + innerMap.get(key));
-                //System.out.println(key + ": " + innerMap.get(key));
-            }
-        }
-
-        request.setAttribute("moviesList", moviesList);
-        request.getRequestDispatcher("movieList.jsp").forward(request, response);
+        movie.setTitle(title);
+        movie.setYear(year);
+        movie.setGenre(genre);
+        
+        request.setAttribute("movie", movie);
+        request.getRequestDispatcher("movieInfo.jsp").forward(request, response);
     }
 
     /**

@@ -17,8 +17,8 @@
     <body>
         <div>
             <h1>Movie List</h1>
-            <c:forEach items="${movieTitles}" var="movieTitle">
-                <p>${movieTitle}</p>
+            <c:forEach items="${moviesList}" var="movie">
+                <p><a href="MovieInfo?imdbID=${movie.imdbID}">${movie.title}</a></p>
             </c:forEach>
         </div>
     </body>
