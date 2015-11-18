@@ -15,8 +15,9 @@
     </head>
     <body>
         <div>
+            <h1>Search Movie Database</h1>
             <form name="search" method="GET" action="MovieSearch">
-                <label for="movie">Search Movie Database</label>
+                <label for="movie">Search</label>
                 <input id="movie" name="movie" type="text" /> <br />
                 
                 <input name="submit" type="submit" value="Search" />
